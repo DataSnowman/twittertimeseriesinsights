@@ -42,16 +42,22 @@
         "uniqueNamePrefix": "[toLower(concat(resourceGroup().name, uniqueString(subscription().subscriptionId)))]",
         "location": "[resourceGroup().location]",
         "sbVersion": "2014-09-01",
-        "sbName": "[concat(variables('uniqueNamePrefix'), 'servicebus')]",
+        "sbNameIngest": "[concat(variables('uniqueNamePrefix'), 'servicebusIngest')]",
+        "sbNameProcess": "[concat(variables('uniqueNamePrefix'), 'servicebusProcess')]",
         "sbKeyName": "RootManageSharedAccessKey",
-        "sbResourceId": "[resourceId('Microsoft.Eventhub/namespaces/authorizationRules', variables('sbName'), variables('sbKeyName'))]",
+        "sbResourceIdIngest": "[resourceId('Microsoft.Eventhub/namespaces/authorizationRules', variables('sbNameIngest'), variables('sbKeyName'))]",
+        "sbResourceIdProcess": "[resourceId('Microsoft.Eventhub/namespaces/authorizationRules', variables('sbNameProcess'), variables('sbKeyName'))]",
         "saJobName": "[concat(variables('namePrefix'), 'sajob')]",
         "saVersion": "2015-06-01",
-        "ehInName": "[concat(variables('namePrefix'), 'ehin')]",
+        "ehInNameIngest": "[concat(variables('namePrefix'), 'ehinIngest')]",
+        "ehInNameProcess": "[concat(variables('namePrefix'), 'ehinProcess')]",
         "ehSendPolicyKeyName": "SendPolicy",
-        "ehSendPolicyResourceId": "[resourceId('Microsoft.EventHub/namespaces/eventHubs/authorizationRules', variables('sbName'), variables('ehInName'), variables('ehSendPolicyKeyName'))]",
-        "ehResourceId": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbName')), '/eventHubs/'), variables('ehInName'))]",
-        "ehSendPolicyName": "[concat(variables('sbName'), concat('/', concat(variables('ehInName'), concat('/', variables('ehSendPolicyKeyName')))))]",
+        "ehSendPolicyResourceIdIngest": "[resourceId('Microsoft.EventHub/namespaces/eventHubs/authorizationRules', variables('sbNameIngest'), variables('ehInNameIngest'), variables('ehSendPolicyKeyName'))]",
+        "ehResourceIdIngest": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbNameIngest')), '/eventHubs/'), variables('ehInNameIngest'))]",
+        "ehSendPolicyNameIngest": "[concat(variables('sbNameIngest'), concat('/', concat(variables('ehInNameIngest'), concat('/', variables('ehSendPolicyKeyName')))))]",
+        "ehSendPolicyResourceIdProcess": "[resourceId('Microsoft.EventHub/namespaces/eventHubs/authorizationRules', variables('sbNameProcess'), variables('ehInNameProcess'), variables('ehSendPolicyKeyName'))]",
+        "ehResourceIdProcess": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbNameProcess')), '/eventHubs/'), variables('ehInNameProcess'))]",
+        "ehSendPolicyNameProcess": "[concat(variables('sbNameIngest'), concat('/', concat(variables('ehInNameProcess'), concat('/', variables('ehSendPolicyKeyName')))))]",
         "sfVersion": "2016-03-01"
     },
     "resources": [{
@@ -93,7 +99,7 @@
         }]
     }, {
         "apiVersion": "[variables('sbVersion')]",
-        "name": "[variables('sbName')]",
+        "name": "[variables('sbNameIngest')]",
         "type": "Microsoft.Eventhub/namespaces",
         "location": "[variables('location')]",
         "properties": {
@@ -101,14 +107,14 @@
         },
         "resources": [{
             "apiVersion": "[variables('sbVersion')]",
-            "name": "[variables('ehInName')]",
+            "name": "[variables('ehInNameIngest')]",
             "type": "eventHubs",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[concat('Microsoft.Eventhub/namespaces/', variables('sbName'))]"
+                "[concat('Microsoft.Eventhub/namespaces/', variables('sbNameIngest'))]"
             ],
             "properties": {
-                "path": "[variables('ehInName')]"
+                "path": "[variables('ehInNameIngest')]"
             },
             "resources": [{
                 "apiVersion": "2015-08-01",
@@ -116,7 +122,7 @@
                 "type": "authorizationRules",
                 "location": "[variables('location')]",
                 "dependsOn": [
-                    "[variables('ehResourceId')]"
+                    "[variables('ehResourceIdIngest')]"
                 ],
                 "properties": {
                     "rights": [
@@ -127,6 +133,41 @@
             }]
         }]
     }, {
+        "apiVersion": "[variables('sbVersion')]",
+        "name": "[variables('sbNameProcess')]",
+        "type": "Microsoft.Eventhub/namespaces",
+        "location": "[variables('location')]",
+        "properties": {
+            "region": "[variables('location')]"
+        },
+        "resources": [{
+            "apiVersion": "[variables('sbVersion')]",
+            "name": "[variables('ehInNameProcess')]",
+            "type": "eventHubs",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Eventhub/namespaces/', variables('sbNameProcess'))]"
+            ],
+            "properties": {
+                "path": "[variables('ehInNameProcess')]"
+            },
+            "resources": [{
+                "apiVersion": "2015-08-01",
+                "name": "[variables('ehSendPolicyKeyName')]",
+                "type": "authorizationRules",
+                "location": "[variables('location')]",
+                "dependsOn": [
+                    "[variables('ehResourceIdProcess')]"
+                ],
+                "properties": {
+                    "rights": [
+                        "Send",
+                        "Listen"
+                    ]
+                }
+            }]
+        }]
+    },{
         "apiVersion": "[variables('saVersion')]",
         "type": "Microsoft.StreamAnalytics/streamingjobs",
         "name": "[variables('saJobName')]",
@@ -143,9 +184,9 @@
                     "DataSource": {
                         "Properties": {
                             "ConsumerGroupName": "",
-                            "EventHubName": "[variables('ehInName')]",
-                            "ServiceBusNamespace": "[variables('sbName')]",
-                            "SharedAccessPolicyKey": "[listkeys(variables('sbResourceId'), variables('sbVersion')).primaryKey]",
+                            "EventHubName": "[variables('ehInNameIngest')]",
+                            "ServiceBusNamespace": "[variables('sbNameIngest')]",
+                            "SharedAccessPolicyKey": "[listkeys(variables('sbResourceIdIngest'), variables('sbVersion')).primaryKey]",
                             "SharedAccessPolicyName": "[variables('sbKeyName')]"
                         },
                         "Type": "Microsoft.ServiceBus/EventHub"
@@ -223,13 +264,21 @@
         }
     }],
     "outputs": {
-        "ehName": {
+        "ehNameIngest": {
             "type": "string",
-            "value": "[variables('ehInName')]"
+            "value": "[variables('ehInNameIngest')]"
         },
-        "eventHubConnectionString": {
+        "eventHubConnectionStringIngest": {
             "type": "string",
-            "value": "[listkeys(variables('ehSendPolicyResourceId'), variables('sbVersion')).primaryConnectionString]"
+            "value": "[listkeys(variables('ehSendPolicyResourceIdIngest'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ehNameProcess": {
+            "type": "string",
+            "value": "[variables('ehInNameProcess')]"
+        },
+        "eventHubConnectionStringProcess": {
+            "type": "string",
+            "value": "[listkeys(variables('ehSendPolicyResourceIdProcess'), variables('sbVersion')).primaryConnectionString]"
         },
         "saName": {
             "type": "string",

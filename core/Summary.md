@@ -6,7 +6,7 @@ This solution sets up the infrastructure in the diagram above. The various steps
 * Pumping ingested tweets into Azure Event Hub which can accept millions of events per second.
 * Processing incoming tweets with an Azure Stream Analytics job that stores the raw data in Azure Blob Storage and Azure SQL Database.
 * The Stream Analytics job calls an Azure Machine Learning web service to determine the sentiment of each tweet. 
-* Visualizing real-time metrics about inferred sentiment using Power BI.
+* Visualizing real-time metrics about inferred sentiment using Time Series Insights for OT monitoring and Power BI for IT reporting and analysis.
 
 ## Prerequisites
 

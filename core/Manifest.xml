@@ -3,7 +3,7 @@
   <Title>Twitter Time Series Insights</Title>
   <Owner displayname="Darwin Schweitzer" email="darsch@microsoft.com"/>
   <ImageUrl>{PatternAssetBaseUrl}/timeseriesinsight.png</ImageUrl>
-  <Description>Analyzing data streams in real-time is a problem that a lot of businesses can relate to. In this fast paced digital era, enterprises depend on insights from Operational Technology like real-time times series analysis to detect changes, monitor, and/or control physical devices, processes, and events in the enterprise..  This tutorial lets you stream data from Twitter using Key Words of your choice including #hashtags and @mentions and use Microsofts Time Series Insights to monitor those keywords.</Description>
+  <Description>Analyzing data streams in real-time is a problem that a lot of businesses can relate to. In this fast paced digital era, enterprises depend on insights from Operational Technology like real-time times series analysis to detect changes, monitor, and/or control physical devices, processes, and events in the enterprise..  This tutorial lets you stream data from Twitter using Key Words of your choice including #hashtags and @mentions and use Microsoft's Time Series Insights to monitor those keywords.</Description>
   <Summary src="Summary.md" format="markdown"/>
   <EstimatedTime>15 Minutes</EstimatedTime>
   <Ingredients>
@@ -84,7 +84,7 @@
     </SolutionDashboard>
     <AzureFunctionApp title="Starting data ingress">
       <ConnectionStrings>
-        <Add name="EventHubConnectionString" connectionString="{Outputs.eventHubConnectionString}" />
+        <Add name="EventHubConnectionString" connectionString="{Outputs.eventHubConnectionStringIngest}" />
       </ConnectionStrings>
       <DeployWebJobs src="{PatternAssetBaseUrl}/WebJobs.zip" />
     </AzureFunctionApp>
