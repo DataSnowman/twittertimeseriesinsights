@@ -41,6 +41,10 @@
         "namePrefix": "[resourceGroup().name]",
         "uniqueNamePrefix": "[toLower(concat(resourceGroup().name, uniqueString(subscription().subscriptionId)))]",
         "location": "[resourceGroup().location]",
+        "stgVersion": "2015-06-15",
+        "storageAccountType": "Standard_GRS",
+        "storageAccountName": "[variables('uniqueNamePrefix')]",
+        "storageId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
         "sbVersion": "2014-09-01",
         "sbNameIngest": "[concat(variables('uniqueNamePrefix'), 'servicebusIngest')]",
         "sbNameProcess": "[concat(variables('uniqueNamePrefix'), 'servicebusProcess')]",
@@ -61,6 +65,15 @@
         "sfVersion": "2016-03-01"
     },
     "resources": [{
+            "name": "[variables('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[variables('location')]",
+            "apiVersion": "[variables('stgVersion')]",
+            "properties": {
+                "accountType": "[variables('storageAccountType')]"
+            }
+        },
+        {
         "name": "[variables('sqlServerName')]",
         "type": "Microsoft.Sql/servers",
         "location": "[variables('location')]",
@@ -214,7 +227,54 @@
                         "Type": "Microsoft.Sql/Server/Database"
                     }
                 }
-            }],
+            },
+            {
+            "Name": "ehProcessOutput",
+            "Properties": {
+              "Type": "stream",
+              "Serialization": {
+                "Type": "JSON",
+                "Properties": { "encoding": "UTF8" }
+              },
+              "DataSource": {
+                "Type": "Microsoft.ServiceBus/EventHub",
+                "Properties": {
+                  "EventHubName": "[variables('ehInNameProcess')]",
+                  "ServiceBusNamespace": "[variables('sbNameProcess')]",
+                  "SharedAccessPolicyName": "[variables('sbKeyName')]",
+                  "SharedAccessPolicyKey": "[listkeys(variables('sbResourceIdProcess'), variables('sbVersion')).primaryKey]"
+                }
+              }
+            }
+          },
+          {
+                "Name": "StorageOutput",
+                "Properties": {
+                    "DataSource": {
+                        "Properties": {
+                            "Container": "twitterRows",
+                            "DateFormat": "yyyy/MM/dd",
+                            "TimeFormat": "HH",
+                            "PathPattern": "Output/logs/{date}/{time}",
+                            "StorageAccounts": [
+                                        {
+                                            "AccountKey": "[listkeys(variables('storageId'), variables('stgVersion')).key1]",
+                                            "AccountName": "[variables('storageAccountName')]"
+                                        }
+                                    ]
+                                },
+                            "Type": "Microsoft.Storage/Blob"
+                        },
+                            "Serialization": {
+                                "Properties": {
+                                    "fieldDelimiter": ",",
+                                    "Encoding": "UTF8"
+                                },
+                                "Type": "JSON"
+                            }
+                        }
+                    }
+            ],
             "Transformation": {
                 "Name": "AllToSqlDb",
                 "Properties": {
