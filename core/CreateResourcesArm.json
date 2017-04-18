@@ -62,6 +62,7 @@
         "ehSendPolicyResourceIdProcess": "[resourceId('Microsoft.EventHub/namespaces/eventHubs/authorizationRules', variables('sbNameProcess'), variables('ehInNameProcess'), variables('ehSendPolicyKeyName'))]",
         "ehResourceIdProcess": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbNameProcess')), '/eventHubs/'), variables('ehInNameProcess'))]",
         "ehSendPolicyNameProcess": "[concat(variables('sbNameIngest'), concat('/', concat(variables('ehInNameProcess'), concat('/', variables('ehSendPolicyKeyName')))))]",
+        "consumerGroupName": "timeseriestweets",
         "sfVersion": "2016-03-01"
     },
     "resources": [{
@@ -156,7 +157,7 @@
         "resources": [{
             "apiVersion": "[variables('sbVersion')]",
             "name": "[variables('ehInNameProcess')]",
-            "type": "eventHubs",
+            "type": "EventHubs",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Eventhub/namespaces/', variables('sbNameProcess'))]"
@@ -165,6 +166,15 @@
                 "path": "[variables('ehInNameProcess')]"
             },
             "resources": [{
+                "apiVersion": "2015-08-01",
+                "name": "[variables('consumerGroupName')]",
+                "type": "ConsumerGroups",
+                "location": "[variables('location')]",
+                "dependsOn": [
+                    "[concat('Microsoft.EventHub/namespaces/', variables('sbNameProcess'),'/eventhubs/',variables('ehInNameProcess'))]"
+                ],
+                "properties": {}
+            }, {
                 "apiVersion": "2015-08-01",
                 "name": "[variables('ehSendPolicyKeyName')]",
                 "type": "authorizationRules",
@@ -175,7 +185,8 @@
                 "properties": {
                     "rights": [
                         "Send",
-                        "Listen"
+                        "Listen",
+                        "Manage"
                     ]
                 }
             }]
