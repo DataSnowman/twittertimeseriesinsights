@@ -53,8 +53,8 @@
         "sbResourceIdProcess": "[resourceId('Microsoft.Eventhub/namespaces/authorizationRules', variables('sbNameProcess'), variables('sbKeyName'))]",
         "saJobName": "[concat(variables('namePrefix'), 'sajob')]",
         "saVersion": "2015-06-01",
-        "ehInNameIngest": "[concat(variables('namePrefix'), 'ehinIngest')]",
-        "ehInNameProcess": "[concat(variables('namePrefix'), 'ehinProcess')]",
+        "ehInNameIngest": "[concat(variables('namePrefix'), 'ehiningest')]",
+        "ehInNameProcess": "[concat(variables('namePrefix'), 'ehinprocess')]",
         "ehSendPolicyKeyName": "SendPolicy",
         "ehSendPolicyResourceIdIngest": "[resourceId('Microsoft.EventHub/namespaces/eventHubs/authorizationRules', variables('sbNameIngest'), variables('ehInNameIngest'), variables('ehSendPolicyKeyName'))]",
         "ehResourceIdIngest": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbNameIngest')), '/eventHubs/'), variables('ehInNameIngest'))]",
@@ -63,7 +63,37 @@
         "ehResourceIdProcess": "[concat(concat(concat('Microsoft.Eventhub/namespaces/', variables('sbNameProcess')), '/eventHubs/'), variables('ehInNameProcess'))]",
         "ehSendPolicyNameProcess": "[concat(variables('sbNameIngest'), concat('/', concat(variables('ehInNameProcess'), concat('/', variables('ehSendPolicyKeyName')))))]",
         "consumerGroupName": "timeseriestweets",
-        "sfVersion": "2016-03-01"
+        "sfVersion": "2016-03-01",
+        "environmentName": "[concat(variables('uniqueNamePrefix'), 'tsienv')]",
+        "environmentSkuName": "S1",
+        "environmentSkuCapacity": 1,
+        "environmentDataRetentionTime": "P30D",
+        "environmentDisplayName": "StreamingTweets",
+        "eventSourceName": "[concat(variables('uniqueNamePrefix'), 'eventsource')]",
+        "eventSourceDisplayName": "Twitter Time Series Insights",
+        "eventHubResourceId": "[variables('sbResourceIdProcess')]",
+        "eventHubServiceBusNamespace": "[variables('sbNameProcess')]",
+        "eventHubName": "[variables('ehInNameProcess')]",
+        "eventHubConsumerGroupName": "[variables('consumerGroupName')]",
+        "eventHubKeyName": "[variables('sbKeyName')]",
+        "eventHubSharedAccessKey": "[variables('ehSendPolicyResourceIdProcess')]",
+        "accessPolicyName": "user",
+        "accessPolicyPrincipalObjectId": "notsure",
+        "accessPolicyRole": "Contributor",
+        "environmentTagsOptions": [
+            null,
+            {
+                "displayName": "[variables('environmentDisplayName')]"
+            }
+        ],
+        "environmentTagsValue": "[variables('environmentTagsOptions')[length(take(variables('environmentDisplayName'), 1))]]",
+        "eventSourceTagsOptions": [
+            null,
+            {
+                "displayName": "[variables('eventSourceDisplayName')]"
+            }
+        ],
+        "eventSourceTagsValue": "[variables('eventSourceTagsOptions')[length(take(variables('eventSourceDisplayName'), 1))]]"
     },
     "resources": [{
             "name": "[variables('storageAccountName')]",
@@ -333,6 +363,41 @@
                 }
             }]
         }
+    },
+    {
+      "type": "Microsoft.TimeSeriesInsights/environments",
+      "name": "[variables('environmentName')]",
+      "apiVersion": "2017-02-28-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "dataRetentionTime": "[variables('environmentDataRetentionTime')]"
+      },
+      "sku": {
+        "name": "[variables('environmentSkuName')]",
+        "capacity": "[variables('environmentSkuCapacity')]"
+      },
+      "tags": "[variables('environmentTagsValue')]",
+      "resources": [
+        {
+          "type": "eventsources",
+          "name": "[variables('eventSourceName')]",
+          "apiVersion": "2017-02-28-preview",
+          "location": "[resourceGroup().location]",
+          "kind": "Microsoft.EventHub",
+          "properties": {
+            "eventSourceResourceId": "[variables('eventHubResourceId')]",
+            "serviceBusNamespace": "[variables('eventHubServiceBusNamespace')]",
+            "eventHubName": "[variables('eventHubName')]",
+            "consumerGroupName": "[variables('eventHubConsumerGroupName')]",
+            "keyName": "[variables('eventHubKeyName')]",
+            "sharedAccessKey": "[listkeys(variables('sbResourceIdProcess'), variables('sbVersion')).primaryKey]"
+          },
+          "tags": "[variables('eventSourceTagsValue')]",
+          "dependsOn": [
+            "[concat('Microsoft.TimeSeriesInsights/environments/', variables('environmentName'))]"
+          ]
+        }
+      ]
     }],
     "outputs": {
         "ehNameIngest": {
@@ -370,6 +435,12 @@
         "sqlConnectionString": {
             "type": "string",
             "value": "[concat('Server=tcp:',variables('sqlServerName'),'.database.windows.net,1433;Database=',variables('sqlDatabaseName'),';User ID=',parameters('sqlServerUsername'),';Password=',parameters('sqlServerPassword'),';Trusted_Connection=False;Encrypt=True;Connection Timeout=30')]"
-        }
+        },
+        "dataAccessId" : {
+            "value" : "[reference(resourceId('Microsoft.TimeSeriesInsights/environments', variables('environmentName'))).dataAccessId]",
+             "type": "string"
+        },
+        "dataAccessPaneUrl": { "type": "string", "value": "[concat('https://portal.azure.com/#resource/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.TimeSeriesInsights/environments/', variables('environmentName'),'/access')]" },
+        "tsiOverviewUrl": { "type": "string", "value": "[concat('https://portal.azure.com/#resource/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.TimeSeriesInsights/environments/', variables('environmentName'),'/overview')]" }
     }
 }
