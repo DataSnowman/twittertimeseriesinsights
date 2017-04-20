@@ -35,7 +35,7 @@
     <Manual title="Configure Twitter listener">
       <Parameters>
         <Parameter name="twitterKeywords" description="Twitter topics"
-          type="string" defaultValue="@hannover_messe,#EnergyTransition,#robot,#Maintenance,#bigdata,#Engineering,#Exoskelette,#Industrie40,#powergrid,#renewableenergy">
+          type="string" defaultValue="@hannover_messe,#hm17,#Cobots,#digitaltwin,#energyefficiency,#Industrie40,#Integrated,#energy,#PredictiveMaintenance,#Smart,#Coatings,#AI,#IoT,#EnergyTransition,#robot,#Maintenance,#bigdata,#Engineering,#Exoskelette,#powergrid,#renewableenergy">
           <ExtraDescription>
             Comma-separated list of words, phrases, #hashtags and @mentions
           </ExtraDescription>

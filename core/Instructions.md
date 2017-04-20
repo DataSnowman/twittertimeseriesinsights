@@ -5,8 +5,10 @@
 
  * Click on **+Add** > **Select user** > **Enter your account** > click **Select**
  * Click on **Select role** > choose **Contributor** > click **Ok** > click **Ok**
- * Click on **Overview** or [Open Time Series Insights Overview]({Outputs.tsiOverviewUrl}).
- * Click on the Time Series Insights URL
+ * Click on **Overview**
+ * Click on the **Time Series Insights URL**
+ 
+ [Open Time Series Insights Overview]({Outputs.tsiOverviewUrl}).
 
 #### Embedded Power BI 
 [Open the dashboard in a new window]({Outputs.solutionDashboardUrl}).  Refresh the browser to see newest data.
@@ -32,7 +34,7 @@
 **Change Keywords in Function app settings**
 [Open the Function App](https://ms.portal.azure.com/?flight=1#blade/WebsitesExtension/FunctionsIFrameBlade/id/%2Fsubscriptions%2F{SubscriptionId}%2FresourceGroups%2F{ProjectName}%2Fproviders%2FMicrosoft.Web%2Fsites%2F{Outputs.functionAppName})
 
- * Click on **Function app setting** > **Configure app setting** > **App settings** and then change the values for **TWITTER_KEYWORDS**
+ * Click on **Platform features** > **Application setting** > scroll to find **App settings** and then change the values for **TWITTER_KEYWORDS**
  * Click **Save** at the top of the App settings blade
  * Open the Database in SQL Server Management Studio or Visual Studio and open a **New Query**
  * Enter ```truncate table TweetScore``` and click **Execute** (This will remove all the records from you previous key words)

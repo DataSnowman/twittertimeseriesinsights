@@ -1,4 +1,4 @@
-[![Solution Diagram]({PatternAssetBaseUrl}/TwitterStreamAnalysisWithAMLDiagram.JPG)]({PatternAssetBaseUrl}/TwitterStreamAnalysisWithAMLDiagram.JPG)
+[![Solution Diagram]({PatternAssetBaseUrl}/TwitterStreamAnalysisWithAMLDiagram.jpg)]({PatternAssetBaseUrl}/TwitterStreamAnalysisWithAMLDiagram.jpg)
 
 This solution sets up the infrastructure in the diagram above. The various steps are as follows:
 
