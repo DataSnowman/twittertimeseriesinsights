@@ -24,8 +24,8 @@
           <DefaultValue>
             SELECT Text, Topic, CreatedAt, Result.[Score] as Score INTO [SQLOutput] FROM
             (SELECT Text, Topic, DATEADD(ms, timestamp_ms, '1970-01-01') as CreatedAt, sentiment(text) as Result FROM [TwitterStream]) TwitterStream;
-            SELECT timestamp, topic, Result.[Score] as score INTO [ehProcessOutput] FROM
-            (SELECT DATEADD(ms, timestamp_ms, '1970-01-01') as timestamp, Topic as topic, sentiment(text) as Result FROM [TwitterStream]) TwitterStream;
+            SELECT timestamp, topic, Result.[Score] as score, Text, id, retweet_count, time_zone, lang INTO [ehProcessOutput] FROM
+            (SELECT DATEADD(ms, timestamp_ms, '1970-01-01') as timestamp, Topic as topic, sentiment(text) as Result, Text, id, retweet_count, time_zone, lang FROM [TwitterStream]) TwitterStream;
             SELECT timestamp, topic, Result.[Score] as score INTO [StorageOutput] FROM
             (SELECT DATEADD(ms, timestamp_ms, '1970-01-01') as timestamp, Topic as topic, sentiment(text) as Result FROM [TwitterStream]) TwitterStream;
           </DefaultValue>

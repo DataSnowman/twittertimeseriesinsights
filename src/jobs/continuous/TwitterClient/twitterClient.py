@@ -26,8 +26,12 @@ class listener(StreamListener):
 				output = json.dumps(
 					{
 						'text': text,
-						'timestamp_ms': tweet['timestamp_ms'],
-						'topic': topic
+                        'timestamp_ms': tweet['timestamp_ms'],
+                        'topic': topic,
+                        'id': tweet['id'],
+                        'retweet_count': tweet['retweet_count'],
+                        'time_zone': tweet['user']['time_zone'],
+                        'lang': tweet['user']['lang']
 					})
 				self.sbs.send_event(self.event_hub_name, output)
 			return True
