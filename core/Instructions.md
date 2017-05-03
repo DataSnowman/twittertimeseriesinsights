@@ -6,9 +6,11 @@
  * Click on **+Add** > **Select user** > **Enter your account** > click **Select**
  * Click on **Select role** > choose **Contributor** > click **Ok** > click **Ok**
  * Click on **Overview**
- * Click on the **Time Series Insights URL**
+ * Click on **Go to Environment** or the **Time Series Insights URL**
  
  [Open Time Series Insights Overview]({Outputs.tsiOverviewUrl}).
+ 
+ * Click on **Go to Environment** or the **Time Series Insights URL**
 
 #### Embedded Power BI 
 [Open the dashboard in a new window]({Outputs.solutionDashboardUrl}).  Refresh the browser to see newest data.

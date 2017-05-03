@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Template>
-  <Title>Twitter Time Series Insights</Title>
+  <Title>Time Series Insights using Twitter</Title>
   <Owner displayname="Darwin Schweitzer" email="darsch@microsoft.com"/>
   <ImageUrl>{PatternAssetBaseUrl}/timeseriesinsight.png</ImageUrl>
   <Description>Analyzing data streams in real-time is a problem that a lot of businesses can relate to. In this fast paced digital era, enterprises depend on insights from Operational Technology like real-time times series analysis to detect changes, monitor, and/or control physical devices, processes, and events in the enterprise..  This tutorial lets you stream data from Twitter using Key Words of your choice including #hashtags and @mentions and use Microsoft's Time Series Insights to monitor those keywords.</Description>
@@ -35,7 +35,7 @@
     <Manual title="Configure Twitter listener">
       <Parameters>
         <Parameter name="twitterKeywords" description="Twitter topics"
-          type="string" defaultValue="@hannover_messe,#hm17,#Cobots,#digitaltwin,#energyefficiency,#Industrie40,#Integrated,#energy,#PredictiveMaintenance,#Smart,#Coatings,#AI,#IoT,#EnergyTransition,#robot,#Maintenance,#bigdata,#Engineering,#Exoskelette,#powergrid,#renewableenergy">
+          type="string" defaultValue="@Microsoft,@ch9,#msbuild,#Seattle,#devops,#agile,#cloud,#msdev,#developer,#Xamarin,#azure,#startups,#microservices">
           <ExtraDescription>
             Comma-separated list of words, phrases, #hashtags and @mentions
           </ExtraDescription>
