@@ -8,18 +8,22 @@
  * Click on **Overview**
  * Click on **Go to Environment** or the **Time Series Insights URL**
  
- [Open Time Series Insights Overview]({Outputs.tsiOverviewUrl}).
+ [Open Time Series Insights](https://insights.timeseries.azure.com/).
  
- * Click on **Go to Environment** or the **Time Series Insights URL**
-
 #### Embedded Power BI 
 [Open the dashboard in a new window]({Outputs.solutionDashboardUrl}).  Refresh the browser to see newest data.
 
 #### Quick links
+* [Time Series Insights](https://insights.timeseries.azure.com/)
+* [Power BI]({Outputs.solutionDashboardUrl})
 * [Stream Analysis with Azure ML machine learning web service API manual]({Outputs.webServiceHelpUrl})
 * [Machine Learning Experiment]({Outputs.experimentUrl})
 * [Power BI Desktop .pbix file]({PatternAssetBaseUrl}/dashboards/StreamingTweetsDesktop.pbix) (*Edge
     might change the extension to .zip*)
+
+#### Video
+
+[Video](https://channel9.msdn.com/Shows/Cortana-Intelligence-Corner/Twitter-Sentiment-Analysis-using-the-Cortana-Intelligence-Gallery) on how to do use this Solution Template to do Twitter Sentiment Analysis using the Cortana Intelligence Gallery by Chris Testa-O'Neill
 
 **Connecting Power BI Desktop to Azure SQL Database**
 * Open the Power BI Desktop report and choose **Edit Queries** > **Data Source Settings** > **Change Source** and then paste the Server and Database names from the information below and Click **OK**

@@ -1,6 +1,11 @@
+### Welcome to the Microsoft Cortana Intelligence Solution Template - Time Series Insights using Twitter
+
+
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://start.cortanaintelligence.com/Deployments/new/twittertimeseriesinsights)
+
 [![Solution Diagram]({PatternAssetBaseUrl}/twittertimeseriesinsights.jpg)]({PatternAssetBaseUrl}/twittertimeseriesinsights.jpg)
 
-This solution sets up the infrastructure in the diagram above. The various steps are as follows:
+his solution sets up the infrastructure in the diagram above. The various steps are as follows:
 
 * Setting up an Azure WebJob to collect Twitter data based on user specified keywords.
 * Pumping ingested tweets into Azure Event Hub which can accept millions of events per second.
