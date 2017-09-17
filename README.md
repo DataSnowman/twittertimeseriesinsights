@@ -5,7 +5,7 @@
 
 [![Solution Diagram](assets/twittertimeseriesinsights.jpg)](assets/twittertimeseriesinsights.jpg)
 
-his solution sets up the infrastructure in the diagram above. The various steps are as follows:
+This solution sets up the infrastructure in the diagram above. The various steps are as follows:
 
 * Setting up an Azure WebJob to collect Twitter data based on user specified keywords.
 * Pumping ingested tweets into Azure Event Hub which can accept millions of events per second.
