@@ -3,7 +3,7 @@
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://start.cortanaintelligence.com/Deployments/new/twittertimeseriesinsights)
 
-[![Solution Diagram]({PatternAssetBaseUrl}/twittertimeseriesinsights.jpg)]({PatternAssetBaseUrl}/twittertimeseriesinsights.jpg)
+[![Solution Diagram](assets/twittertimeseriesinsights.jpg)](assets/twittertimeseriesinsights.jpg)
 
 his solution sets up the infrastructure in the diagram above. The various steps are as follows:
 
